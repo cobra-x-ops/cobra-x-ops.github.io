@@ -13,6 +13,13 @@
   document.querySelectorAll("[data-reveal]").forEach((el) => (reduce ? el.classList.add("in") : reveal.observe(el)));
   if (reduce) return;
 
+  // The hero's endless motion (ticker, light on the line, pulse) rests while the hero is off screen
+  const hero = document.querySelector(".hero"), cobra = document.querySelector(".cobra");
+  new IntersectionObserver(([e]) => {
+    document.body.classList.toggle("hero-off", !e.isIntersecting);
+    if (cobra && cobra.pauseAnimations) e.isIntersecting ? cobra.unpauseAnimations() : cobra.pauseAnimations();
+  }, { rootMargin: "0px 0px 120px 0px" }).observe(document.querySelector(".ticker") || hero);
+
   const wait = (ms, run) => new Promise((ok) => setTimeout(() => ok(run.on), ms));
 
   // Each looping section only moves while it is on screen

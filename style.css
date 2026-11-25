@@ -12,17 +12,14 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--bg)}
-body{background:var(--bg);color:var(--ink);font:400 17px/1.5 "Inter",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg) url(noise.png);color:var(--ink);font:400 17px/1.5 "Inter",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 a{color:inherit;text-decoration:none}
-main{overflow-x:hidden}
+main{overflow-x:clip}
 ::selection{background:var(--acid);color:var(--bg)}
 .mono{font-family:var(--mono);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
 .wrap{width:var(--w);margin:0 auto}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* grain */
-.grain{position:fixed;inset:-50%;z-index:50;pointer-events:none;opacity:.09;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.6 -.6'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* top bar */
 .bar{position:sticky;top:0;z-index:40;background:rgba(11,11,10,.92);border-bottom:1px solid var(--rule);padding-top:env(safe-area-inset-top)}
@@ -32,8 +29,9 @@ main{overflow-x:hidden}
 .bar nav a:hover,.bar nav a:focus-visible{color:var(--acid)}
 .bar nav b{color:var(--dim);font-weight:500;margin-right:6px}
 .live{display:flex;align-items:center;gap:10px}
-.live i{width:8px;height:8px;border-radius:50%;background:var(--acid);box-shadow:0 0 0 0 rgba(207,255,58,.6);animation:ping 2s infinite}
-@keyframes ping{70%{box-shadow:0 0 0 9px rgba(207,255,58,0)}100%{box-shadow:0 0 0 0 rgba(207,255,58,0)}}
+.live i{position:relative;width:8px;height:8px;border-radius:50%;background:var(--acid)}
+.live i::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--acid);animation:ping 2s ease-out infinite}
+@keyframes ping{from{transform:scale(1);opacity:.6}70%,to{transform:scale(3.2);opacity:0}}
 
 /* hero */
 .hero{position:relative;padding:clamp(40px,7vw,96px) 0 clamp(28px,4vw,48px)}
@@ -44,15 +42,15 @@ main{overflow-x:hidden}
 .ln:nth-child(2) .ch{animation-delay:calc(.55s + var(--i) * 50ms)}
 @keyframes rise{from{transform:translateY(105%)}}
 .role{font-size:clamp(10.5px,1.75vw,22px);line-height:1.35;letter-spacing:.06em;padding-bottom:.35em;color:var(--ink);white-space:nowrap}
-.role span{display:block;clip-path:inset(0 100% 0 0);animation:wipe .7s var(--ease) both}
+.role span{display:block;animation:slide .7s var(--ease) both}
 .role span:nth-child(1){animation-delay:1.05s}.role span:nth-child(2){animation-delay:1.19s}.role span:nth-child(3){animation-delay:1.33s;color:var(--acid)}
-@keyframes wipe{to{clip-path:inset(0 0 0 0)}}
+@keyframes slide{from{opacity:0;transform:translateX(-16px)}}
 .cobra{display:block;width:100%;height:auto;margin:clamp(18px,3vw,34px) 0 clamp(22px,3.4vw,40px);overflow:visible}
 .cobra .head{opacity:0;animation:show .3s 2.75s forwards}
 @keyframes show{to{opacity:1}}
 .spec .label{display:block;font-size:12px;color:var(--mute);margin-bottom:10px;letter-spacing:.12em}
 .spec p{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .55em;font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:1.05;font-size:min(calc(var(--w) / 24.8),52px)}
-.spec p span{clip-path:inset(0 100% 0 0);animation:wipe .8s var(--ease) both}
+.spec p span{animation:slide .8s var(--ease) both}
 .spec p span:nth-of-type(1){animation-delay:1.7s}.spec p span:nth-of-type(2){animation-delay:1.92s}.spec p span:nth-of-type(3){animation-delay:2.14s}
 .spec p i{font-style:normal;color:var(--acid);font-weight:500}
 
@@ -62,6 +60,7 @@ main{overflow-x:hidden}
 .ticker span{display:inline-flex;align-items:center;gap:26px;padding:20px 13px;font-size:clamp(14px,1.6vw,21px)}
 .ticker span::after{content:"";width:10px;height:10px;background:var(--bg);transform:rotate(45deg)}
 @keyframes tick{to{transform:translate3d(-50%,0,0)}}
+.hero-off .ticker .track,.hero-off .cobra .run{animation-play-state:paused}
 
 /* sections */
 section.block{padding:clamp(64px,9vw,128px) 0 0}
@@ -126,7 +125,7 @@ section.block{padding:clamp(64px,9vw,128px) 0 0}
 .stamp .ring{animation:spin 28s linear infinite}
 .stamp text{font-family:var(--mono);font-weight:500;font-size:15.5px;letter-spacing:.16em;fill:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
-[data-reveal].stamp{opacity:0;transform:scale(1.3) rotate(-14deg);transition:opacity .5s,transform .75s cubic-bezier(.3,1.5,.5,1)}
+[data-reveal].stamp{opacity:0;transform:scale(.55) rotate(-14deg);transition:opacity .4s,transform .7s cubic-bezier(.3,1.25,.5,1)}
 [data-reveal].stamp.in{opacity:1;transform:none}
 .stamp .check{stroke-dasharray:70;stroke-dashoffset:70;transition:stroke-dashoffset .6s var(--ease) .55s}
 .stamp.in .check{stroke-dashoffset:0}
@@ -183,7 +182,7 @@ footer a:hover,footer a:focus-visible{color:var(--acid)}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .ch,.role span,.spec p span{clip-path:none;transform:none}
+  .ch,.role span,.spec p span{transform:none;opacity:1}
   .cobra .draw{stroke-dashoffset:0!important}.cobra .run{display:none}.cobra .head{opacity:1}
   .js [data-reveal],.js [data-reveal].stamp{opacity:1;transform:none}
   .stamp .check{stroke-dashoffset:0}
