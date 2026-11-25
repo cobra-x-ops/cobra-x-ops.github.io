@@ -14,6 +14,7 @@
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--bg)}
 body{background:var(--bg);color:var(--ink);font:400 17px/1.5 "Inter",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 a{color:inherit;text-decoration:none}
+main{overflow-x:hidden}
 ::selection{background:var(--acid);color:var(--bg)}
 .mono{font-family:var(--mono);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
 .wrap{width:var(--w);margin:0 auto}
@@ -125,7 +126,7 @@ section.block{padding:clamp(64px,9vw,128px) 0 0}
 .stamp .ring{animation:spin 28s linear infinite}
 .stamp text{font-family:var(--mono);font-weight:500;font-size:15.5px;letter-spacing:.16em;fill:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
-[data-reveal].stamp{opacity:0;transform:scale(1.7) rotate(-14deg);transition:opacity .5s,transform .75s cubic-bezier(.3,1.5,.5,1)}
+[data-reveal].stamp{opacity:0;transform:scale(1.3) rotate(-14deg);transition:opacity .5s,transform .75s cubic-bezier(.3,1.5,.5,1)}
 [data-reveal].stamp.in{opacity:1;transform:none}
 .stamp .check{stroke-dasharray:70;stroke-dashoffset:70;transition:stroke-dashoffset .6s var(--ease) .55s}
 .stamp.in .check{stroke-dashoffset:0}
